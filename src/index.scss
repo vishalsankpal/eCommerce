@@ -1,0 +1,117 @@
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-color: #fff;
+  color: black;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+}
+$breakpoints: (
+  "default": "default",
+  "xxl": 2560px,
+  "xl": 1440px,
+  "lg": 1366px,
+  "md": 1024px,
+  "sm": 926px,
+  "xs": 767px,
+  "xxs": 480px,
+);
+.grid {
+  display: grid;
+}
+@each $name, $breakpoint in $breakpoints {
+  @if ($breakpoint != "default") {
+    @media only screen and (max-width: $breakpoint) {
+      //Columns
+      @for $i from 1 through 12 {
+        .#{$name}\:grid-col-#{$i} {
+          grid-template-columns: repeat($i, minmax(0, 1fr));
+        }
+      }
+      //row
+      @for $i from 1 through 12 {
+        .#{$name}\:grid-row-#{$i} {
+          grid-template-rows: repeat($i, minmax(0, 1fr));
+        }
+      }
+      //gaps
+      @for $i from 1 through 12 {
+        .#{$name}\:gap-#{$i} {
+          gap: #{$i}rem;
+        }
+        .#{$name}\:gap-x-#{$i} {
+          gap: #{$i}rem;
+        }
+        .#{$name}\:gap-y-#{$i} {
+          gap: #{$i}rem;
+        }
+      }
+      //span
+      @for $i from 1 through 12 {
+        .#{$name}\:col-span-#{$i} {
+          grid-column: span $i/span $i;
+        }
+      }
+      //col-start
+      @for $i from 1 through 12 {
+        .#{$name}\:col-start-#{$i} {
+          grid-column-start: $i;
+        }
+      }
+      //col-end
+      @for $i from 1 through 12 {
+        .#{$name}\:col-end-#{$i} {
+          grid-column-end: $i;
+        }
+      }
+      // Row-start
+      @for $i from 1 through 12 {
+        .#{$name}\:row-start-#{$i} {
+          grid-row-start: $i;
+        }
+      }
+      // Row-end
+      @for $i from 1 through 12 {
+        .#{$name}\:row-end-#{$i} {
+          grid-row-end: $i;
+        }
+      }
+    }
+  } @else {
+    // Columns
+    @for $i from 1 through 12 {
+      .grid-col-#{$i} {
+        grid-template-columns: repeat($i, minmax(0, 1fr));
+      }
+    }
+
+    // Rows
+    @for $i from 1 through 12 {
+      .grid-row-#{$i} {
+        grid-template-rows: repeat($i, minmax(0, 1fr));
+      }
+    }
+    @for $i from 1 through 12 {
+      .gap-#{i} {
+        gap: #{$i}rem;
+      }
+      .gap-x-#{i} {
+        column-gap: #{$i}rem;
+      }
+      .gap-y-#{i} {
+        row-gap: #{$i}rem;
+      }
+    }
+  }
+}
