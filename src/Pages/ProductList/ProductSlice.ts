@@ -6,6 +6,8 @@ interface ProductState {
   error: string | null;
   selectedCategories: [] | null;
   selectedBrands: [] | null;
+  sortBy: string;
+  sortOrder: string;
 }
 
 const initialState: ProductState = {
@@ -14,6 +16,8 @@ const initialState: ProductState = {
   error: null,
   selectedCategories: [],
   selectedBrands: [],
+  sortBy: "price", // Default sort criteria
+  sortOrder: "asc", // Default sort order
 };
 
 const productSlice = createSlice({
@@ -44,6 +48,19 @@ const productSlice = createSlice({
     setSelectedBrands(state, action) {
       state.selectedBrands = action.payload;
     },
+    /*
+      Here we will create remaining filters
+      But in this particular situation actual api and data is not available so once get will work on remaining part.
+    */
+    setSortCriteria(state, action) {
+      const { sortBy, sortOrder } = action.payload;
+      state.sortBy = sortBy;
+      state.sortOrder = sortOrder;
+    },
+    resetFilters(state) {
+      state.selectedCategories = initialState.selectedCategories;
+      state.selectedBrands = initialState.selectedBrands;
+    },
   },
 });
 
@@ -53,6 +70,8 @@ export const {
   getProductsFailed,
   setSelectedCategories,
   setSelectedBrands,
+  setSortCriteria,
+  resetFilters,
 } = productSlice.actions;
 export default productSlice.reducer;
 

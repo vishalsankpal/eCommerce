@@ -3,6 +3,8 @@ import {
   getProducts,
   setSelectedCategories,
   setSelectedBrands,
+  setSortCriteria,
+  resetFilters,
 } from "./ProductSlice";
 import { useAppSelector, useAppDispatch } from "../../Hooks/hooks";
 import { selectFilteredProducts, selectProducts } from "./Selector";
@@ -16,25 +18,29 @@ const PLP = () => {
   const dispatch = useAppDispatch();
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [sortBy, setSortBy] = useState("price");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const handleClearFilters = () => {
+    dispatch(resetFilters());
+    setCategories([]);
+    setBrands([]);
+  };
   useEffect(() => {
     dispatch(getProducts());
-    // fetch("https://api.escuelajs.co/api/v1/products")
-    //   .then((res) => res.json())
-    //   .then((data) =>
-    //     //   data.products.map(
-    //     //     (item) =>
-    //     //       item.brand === "Rolex" && setProduct((prev) => [...prev, item])
-    //     //   )
-    //     setProduct(data)
-    //   );
-    console.log("actual data", products?.data?.products);
   }, [dispatch]);
+
   useEffect(() => {
     dispatch(setSelectedCategories(categories));
   }, [categories, dispatch]);
+
   useEffect(() => {
     dispatch(setSelectedBrands(brands));
   }, [brands, dispatch]);
+
+  useEffect(() => {
+    dispatch(setSortCriteria({ sortBy, sortOrder }));
+  }, [sortBy, sortOrder, dispatch]);
+
   const handleCategoryChange = (category) => {
     setCategories((prevCategories) =>
       prevCategories.includes(category)
@@ -49,6 +55,10 @@ const PLP = () => {
         : [...prevBrands, brand]
     );
   };
+
+  const handleSortByChange = (e) => setSortBy(e.target.value);
+  const handleSortOrderChange = (e) => setSortOrder(e.target.value);
+
   const uniqueCategories = [
     ...new Set(allProducts.map((product) => product.category)),
   ];
@@ -64,6 +74,23 @@ const PLP = () => {
   }
   return (
     <div>
+      <div>
+        <h3>Sort By</h3>
+        <label>
+          Sort By:
+          <select value={sortBy} onChange={handleSortByChange}>
+            <option value="price">Price</option>
+            <option value="title">Title</option>
+          </select>
+        </label>
+        <label>
+          Order:
+          <select value={sortOrder} onChange={handleSortOrderChange}>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </label>
+      </div>
       <div>
         <h3>Categories</h3>
         {uniqueCategories.map((category) => (
@@ -92,6 +119,7 @@ const PLP = () => {
           </label>
         ))}
       </div>
+      <button onClick={handleClearFilters}>Clear filters</button>
       <ul>
         {filteredProducts.map((product) => (
           <li key={product.id}>
