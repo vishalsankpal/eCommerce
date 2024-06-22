@@ -1,13 +1,38 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-export const selectProducts = (state) => state.products.products;
-export const selectSelectedCategories = (state) =>
-  state.products.selectedCategories;
-export const selectedBrands = (state) => state.products.selectedBrands;
-export const selectSortBy = (state) => state.products.sortBy;
-export const selectSortOrder = (state) => state.products.sortOrder;
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  category: string;
+  brand: string;
+}
 
-const sortProducts = (products, sortBy, sortOrder) => {
+interface ProductsState {
+  products: Product[];
+  selectedCategories: string[];
+  selectedBrands: string[];
+  sortBy: string;
+  sortOrder: "asc" | "desc";
+}
+
+interface RootState {
+  products: ProductsState;
+}
+
+export const selectProducts = (state: RootState) => state.products.products;
+export const selectSelectedCategories = (state: RootState) =>
+  state.products.selectedCategories;
+export const selectedBrands = (state: RootState) =>
+  state.products.selectedBrands;
+export const selectSortBy = (state: RootState) => state.products.sortBy;
+export const selectSortOrder = (state: RootState) => state.products.sortOrder;
+
+const sortProducts = (
+  products: Product[],
+  sortBy: string,
+  sortOrder: "asc" | "desc"
+): Product[] => {
   return products.slice().sort((a, b) => {
     if (sortBy === "price") {
       return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
@@ -31,7 +56,7 @@ export const selectFilteredProducts = createSelector(
   ],
   (products, selectedCategories, selectedBrands, sortBy, sortOrder) => {
     const filteredProducts = products?.filter(
-      (product) =>
+      (product: Product) =>
         (selectedCategories.length === 0 ||
           selectedCategories.includes(product.category)) &&
         (selectedBrands.length === 0 || selectedBrands.includes(product.brand))
