@@ -1,4 +1,4 @@
-import { put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest, call } from "redux-saga/effects";
 import { getProductsSuccess, getProductsFailed } from "./ProductSlice";
 import { getRequest } from "../../services/http.service";
 
@@ -11,22 +11,23 @@ interface Product {
   description: string;
   image: string;
   category: string;
+  brand: string;
 }
 
-function* getProducts(action: { type: string }) {
+function* getProducts() {
   try {
-    //yield console.log("Request inside getProducts saga:", action);
-    const response: Product[] = yield getRequest<Product[]>(
+    const response: { products: Product[] } = yield call(
+      getRequest,
       "https://dummyjson.com/products?limit=50"
     );
-    if (!response) {
-      yield put(getProductsFailed({ error: "Unable to load product" }));
+    if (!response || !response.products) {
+      yield put(getProductsFailed("Unable to load products"));
       return;
     }
     console.log(response.products);
     yield put(getProductsSuccess(response.products));
   } catch (e) {
-    //console.log("Error:", e);
+    const error = e as Error;
     yield put(getProductsFailed(error.message));
   }
 }
