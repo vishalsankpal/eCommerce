@@ -1,15 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+// Define the structure of a Product
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+  brand: string;
+  // Add other fields as necessary
+}
+
+// Define the ProductState interface
 interface ProductState {
   isLoading: boolean;
-  products: [] | null;
+  products: Product[];
   error: string | null;
-  selectedCategories: [] | null;
-  selectedBrands: [] | null;
+  selectedCategories: string[];
+  selectedBrands: string[];
   sortBy: string;
   sortOrder: string;
 }
 
+// Initial state with consistent typing
 const initialState: ProductState = {
   isLoading: false,
   products: [],
@@ -20,6 +34,7 @@ const initialState: ProductState = {
   sortOrder: "asc", // Default sort order
 };
 
+// Create the product slice
 const productSlice = createSlice({
   name: "products",
   initialState,
@@ -28,31 +43,27 @@ const productSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
-    getProductsSuccess: (state, action: PayloadAction<{ results: any[] }>) => {
+    getProductsSuccess(state, action: PayloadAction<Product[]>) {
       console.log("getproduct Success:", action);
       state.isLoading = false;
-      //state.data = action.payload.results;
-      console.log("success data", action.payload);
       state.products = action.payload;
-      //console.log(state.data);
       state.error = null;
     },
-    getProductsFailed: (state, action: PayloadAction<{ error: string }>) => {
+    getProductsFailed(state, action: PayloadAction<string>) {
       state.isLoading = false;
-      state.data = [];
+      state.products = [];
       state.error = action.payload;
     },
-    setSelectedCategories(state, action) {
+    setSelectedCategories(state, action: PayloadAction<string[]>) {
       state.selectedCategories = action.payload;
     },
-    setSelectedBrands(state, action) {
+    setSelectedBrands(state, action: PayloadAction<string[]>) {
       state.selectedBrands = action.payload;
     },
-    /*
-      Here we will create remaining filters
-      But in this particular situation actual api and data is not available so once get will work on remaining part.
-    */
-    setSortCriteria(state, action) {
+    setSortCriteria(
+      state,
+      action: PayloadAction<{ sortBy: string; sortOrder: string }>
+    ) {
       const { sortBy, sortOrder } = action.payload;
       state.sortBy = sortBy;
       state.sortOrder = sortOrder;
@@ -64,6 +75,7 @@ const productSlice = createSlice({
   },
 });
 
+// Export actions and reducer
 export const {
   getProducts,
   getProductsSuccess,
@@ -73,53 +85,5 @@ export const {
   setSortCriteria,
   resetFilters,
 } = productSlice.actions;
+
 export default productSlice.reducer;
-
-// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-// interface ProductState {
-//   isLoading: boolean;
-//   data: any[] | null;
-//   error: string | null;
-//   selectedCategories: [] | null;
-// }
-
-// const initialState: ProductState = {
-//   isLoading: false,
-//   data: null,
-//   error: null,
-//   selectedCategories: [],
-// };
-
-// const productSlice = createSlice({
-//   name: "products",
-//   initialState,
-//   reducers: {
-//     getProducts: (state) => {
-//       state.isLoading = true;
-//     },
-//     getProductsSuccess: (state, action: PayloadAction<{ results: any[] }>) => {
-//       console.log("getproduct Success:", action);
-//       state.isLoading = false;
-//       state.data = action.payload.results;
-//       console.log(state.data);
-//       state.error = null;
-//     },
-//     getProductsFailed: (state, action: PayloadAction<{ error: string }>) => {
-//       state.isLoading = false;
-//       state.data = [];
-//       state.error = action.payload.error;
-//     },
-//     setSelectedCategories(state, action) {
-//       state.selectedCategories = action.payload;
-//     },
-//   },
-// });
-
-// export const {
-//   getProducts,
-//   getProductsSuccess,
-//   getProductsFailed,
-//   setSelectedCategories,
-// } = productSlice.actions;
-// export default productSlice.reducer;

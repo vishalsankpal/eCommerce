@@ -1,37 +1,38 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { getProducts, setSortCriteria } from "./ProductSlice";
-import { useAppSelector, useAppDispatch } from "../../Hooks/Hooks";
-import { selectFilteredProducts } from "./Selector";
+import { useAppSelector, useAppDispatch } from "../../Hooks/ReduxHooks";
+import selectFilteredProducts from "./Selector";
 import Sorting from "../../Components/Atom/Sorting/Sorting";
 //import Filter from "../../Components/Atom/Filter/Filter";
 import Loader from "../../Components/Templates/Loader/Loader";
-import { plpWrapper } from "./PLP.module.scss";
+import styles from "./PLP.module.scss";
 import Sidebar from "../../Components/Organisms/Sidebar/Sidebar";
-interface Product {
-  availabilityStatus: string;
-  category: string;
-  description: string;
-  dimensions: object;
-  discountPercentage: number;
-  id: number;
-  images: [];
-  meta: object;
-  minimumOrderQuantity: number;
-  price: number;
-  rating: number;
-  returnPolicy: string;
-  reviews: [];
-  shippingInformation: string;
-  sku: string;
-  stock: number;
-  tags: [];
-  thumbnail: string;
-  title: string;
-  warrentyInformation: string;
-  weight: string;
-  brand: string;
-  // Add other product properties if needed
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// interface Product {
+//   availabilityStatus: string;
+//   category: string;
+//   description: string;
+//   dimensions: object;
+//   discountPercentage: number;
+//   id: number;
+//   images: [];
+//   meta: object;
+//   minimumOrderQuantity: number;
+//   price: number;
+//   rating: number;
+//   returnPolicy: string;
+//   reviews: [];
+//   shippingInformation: string;
+//   sku: string;
+//   stock: number;
+//   tags: [];
+//   thumbnail: string;
+//   title: string;
+//   warrentyInformation: string;
+//   weight: string;
+//   brand: string;
+//   // Add other product properties if needed
+//}
 const PLP: React.FC = (): JSX.Element => {
   const { isLoading, error } = useAppSelector((state) => state.products);
   const filteredProducts = useAppSelector(selectFilteredProducts);
@@ -97,7 +98,7 @@ const PLP: React.FC = (): JSX.Element => {
     return <div>Error: {error}</div>;
   }
   return (
-    <div className={`grid ${plpWrapper}`}>
+    <div className={`grid ${styles.plpWrapper}`}>
       {/* <button onClick={handleClearFilters}>Clear filters</button>
         <Filter
           FilterName="Categories"

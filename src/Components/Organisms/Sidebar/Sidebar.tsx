@@ -6,7 +6,7 @@ import {
   resetFilters,
 } from "../../../Pages/ProductList/ProductSlice";
 import { selectProducts } from "../../../Pages/ProductList/Selector";
-import { useAppSelector, useAppDispatch } from "../../../Hooks/Hooks";
+import { useAppSelector, useAppDispatch } from "../../../Hooks/ReduxHooks";
 import Filter from "../../Atom/Filter/Filter";
 
 interface Product {
@@ -32,7 +32,6 @@ interface Product {
   warrentyInformation: string;
   weight: string;
   brand: string;
-  // Add other product properties if needed
 }
 const Sidebar: React.FC = (): JSX.Element => {
   const allProducts: Product[] = useAppSelector(selectProducts);
@@ -40,6 +39,7 @@ const Sidebar: React.FC = (): JSX.Element => {
   const [categories, setCategories] = useState<string[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+
   useEffect(() => {
     dispatch(setSelectedCategories(categories));
   }, [categories, dispatch]);
@@ -47,11 +47,13 @@ const Sidebar: React.FC = (): JSX.Element => {
   useEffect(() => {
     dispatch(setSelectedBrands(brands));
   }, [brands, dispatch]);
+
   const handleClearFilters = () => {
     dispatch(resetFilters());
     setCategories([]);
     setBrands([]);
   };
+
   const handleCategoryChange = (category: string) => {
     setCategories((prevCategories: string[]) =>
       prevCategories.includes(category)
@@ -59,6 +61,7 @@ const Sidebar: React.FC = (): JSX.Element => {
         : [...prevCategories, category]
     );
   };
+
   const handleBrandChange = (brand: string) => {
     setBrands((prevBrands: string[]) =>
       prevBrands.includes(brand)
@@ -66,19 +69,21 @@ const Sidebar: React.FC = (): JSX.Element => {
         : [...prevBrands, brand]
     );
   };
+
   const uniqueCategories = [
     ...new Set(allProducts.map((product: Product) => product.category)),
   ];
   const uniqueBrands = [
     ...new Set(allProducts.map((product: Product) => product.brand)),
   ];
+
   return (
     <>
       <button
         className={styles.btnToggle}
         onClick={() => setShowSidebar(!showSidebar)}
       >
-        show
+        Show
       </button>
       <aside className={showSidebar ? styles.show : " "}>
         {(categories.length >= 1 || brands.length >= 1) && (
@@ -108,4 +113,5 @@ const Sidebar: React.FC = (): JSX.Element => {
     </>
   );
 };
+
 export default Sidebar;
