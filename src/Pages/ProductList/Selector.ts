@@ -1,11 +1,29 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 interface Product {
-  id: number;
-  title: string;
-  price: number;
+  availabilityStatus: string;
   category: string;
+  description: string;
+  dimensions: object;
+  discountPercentage: number;
+  id: number;
+  images: [];
+  meta: object;
+  minimumOrderQuantity: number;
+  price: number;
+  rating: number;
+  returnPolicy: string;
+  reviews: [];
+  shippingInformation: string;
+  sku: string;
+  stock: number;
+  tags: [];
+  thumbnail: string;
+  title: string;
+  warrentyInformation: string;
+  weight: string;
   brand: string;
+  // Add other product properties if needed
 }
 
 interface ProductsState {
@@ -54,7 +72,13 @@ export const selectFilteredProducts = createSelector(
     selectSortBy,
     selectSortOrder,
   ],
-  (products, selectedCategories, selectedBrands, sortBy, sortOrder) => {
+  (
+    products: Product[],
+    selectedCategories: string[],
+    selectedBrands: string[],
+    sortBy: "price" | "title",
+    sortOrder: "asc" | "desc"
+  ) => {
     const filteredProducts = products?.filter(
       (product: Product) =>
         (selectedCategories.length === 0 ||

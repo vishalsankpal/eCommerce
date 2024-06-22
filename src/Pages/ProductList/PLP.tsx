@@ -1,16 +1,12 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import {
-  getProducts,
-  setSelectedCategories,
-  setSelectedBrands,
-  setSortCriteria,
-  resetFilters,
-} from "./ProductSlice";
-import { useAppSelector, useAppDispatch } from "../../Hooks/hooks";
-import { selectFilteredProducts, selectProducts } from "./Selector";
+import { getProducts, setSortCriteria } from "./ProductSlice";
+import { useAppSelector, useAppDispatch } from "../../Hooks/Hooks";
+import { selectFilteredProducts } from "./Selector";
 import Sorting from "../../Components/Atom/Sorting/Sorting";
-import Filter from "../../Components/Atom/Filter/Filter";
-
+//import Filter from "../../Components/Atom/Filter/Filter";
+import Loader from "../../Components/Templates/Loader/Loader";
+import { plpWrapper } from "./PLP.module.scss";
+import Sidebar from "../../Components/Organisms/Sidebar/Sidebar";
 interface Product {
   availabilityStatus: string;
   category: string;
@@ -39,71 +35,84 @@ interface Product {
 const PLP: React.FC = (): JSX.Element => {
   const { isLoading, error } = useAppSelector((state) => state.products);
   const filteredProducts = useAppSelector(selectFilteredProducts);
-  const allProducts: Product[] = useAppSelector(selectProducts);
+  // const allProducts: Product[] = useAppSelector(selectProducts);
   const dispatch = useAppDispatch();
-  const [categories, setCategories] = useState<string[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
+  // const [categories, setCategories] = useState<string[]>([]);
+  // const [brands, setBrands] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("price");
   const [sortOrder, setSortOrder] = useState<string>("asc");
-  const handleClearFilters = () => {
-    dispatch(resetFilters());
-    setCategories([]);
-    setBrands([]);
-  };
+  // const handleClearFilters = () => {
+  //   dispatch(resetFilters());
+  //   setCategories([]);
+  //   setBrands([]);
+  // };
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(setSelectedCategories(categories));
-  }, [categories, dispatch]);
+  // useEffect(() => {
+  //   dispatch(setSelectedCategories(categories));
+  // }, [categories, dispatch]);
 
-  useEffect(() => {
-    dispatch(setSelectedBrands(brands));
-  }, [brands, dispatch]);
+  // useEffect(() => {
+  //   dispatch(setSelectedBrands(brands));
+  // }, [brands, dispatch]);
 
   useEffect(() => {
     dispatch(setSortCriteria({ sortBy, sortOrder }));
     //console.log(filteredProducts);
   }, [sortBy, sortOrder, dispatch]);
 
-  const handleCategoryChange = (category: string) => {
-    setCategories((prevCategories: string[]) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((cat) => cat !== category)
-        : [...prevCategories, category]
-    );
-  };
-  const handleBrandChange = (brand: string) => {
-    setBrands((prevBrands: string[]) =>
-      prevBrands.includes(brand)
-        ? prevBrands.filter((br) => br !== brand)
-        : [...prevBrands, brand]
-    );
-  };
+  // const handleCategoryChange = (category: string) => {
+  //   setCategories((prevCategories: string[]) =>
+  //     prevCategories.includes(category)
+  //       ? prevCategories.filter((cat) => cat !== category)
+  //       : [...prevCategories, category]
+  //   );
+  // };
+  // const handleBrandChange = (brand: string) => {
+  //   setBrands((prevBrands: string[]) =>
+  //     prevBrands.includes(brand)
+  //       ? prevBrands.filter((br) => br !== brand)
+  //       : [...prevBrands, brand]
+  //   );
+  // };
 
   const handleSortByChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setSortBy(e.target.value);
   const handleSortOrderChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setSortOrder(e.target.value);
 
-  const uniqueCategories = [
-    ...new Set(allProducts.map((product: Product) => product.category)),
-  ];
-  const uniqueBrands = [
-    ...new Set(allProducts.map((product: Product) => product.brand)),
-  ];
+  // const uniqueCategories = [
+  //   ...new Set(allProducts.map((product: Product) => product.category)),
+  // ];
+  // const uniqueBrands = [
+  //   ...new Set(allProducts.map((product: Product) => product.brand)),
+  // ];
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error) {
     return <div>Error: {error}</div>;
   }
   return (
-    <div>
-      <div>
-        <h3>Sort By</h3>
+    <div className={`grid ${plpWrapper}`}>
+      {/* <button onClick={handleClearFilters}>Clear filters</button>
+        <Filter
+          FilterName="Categories"
+          cats={uniqueCategories}
+          appliedCat={categories}
+          onChange={handleCategoryChange}
+        />
+        <Filter
+          FilterName="Brands"
+          cats={uniqueBrands}
+          appliedCat={brands}
+          onChange={handleBrandChange}
+        /> */}
+      <Sidebar />
+      <main>
         <Sorting
           labelName={"Sort By"}
           sortName={sortBy}
@@ -116,27 +125,15 @@ const PLP: React.FC = (): JSX.Element => {
           onChange={handleSortOrderChange}
           options={["asc", "desc"]}
         />
-      </div>
-      <Filter
-        FilterName="Categories"
-        cats={uniqueCategories}
-        appliedCat={categories}
-        onChange={handleCategoryChange}
-      />
-      <Filter
-        FilterName="Brands"
-        cats={uniqueBrands}
-        appliedCat={brands}
-        onChange={handleBrandChange}
-      />
-      <button onClick={handleClearFilters}>Clear filters</button>
-      <ul>
-        {filteredProducts.map((product: Product) => (
-          <li key={product.id}>
-            {product.title} - ${product.price} - {product.category}
-          </li>
-        ))}
-      </ul>
+
+        <div className="grid grid-col-3 gap-3">
+          {filteredProducts.map((product) => (
+            <div key={product.id}>
+              {product.title} - ${product.price} - {product.category}
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 };
