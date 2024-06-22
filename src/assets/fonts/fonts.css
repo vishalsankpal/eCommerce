@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "TodoesRegular";
+  src: url("./TodesRegular.ttf") format("ttf"),
+    url("./TodesRegular.otf") format("otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TodoesMedium";
+  src: url("./TodesMedium.ttf") format("ttf"),
+    url("./TodesMedium.otf") format("otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

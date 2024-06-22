@@ -1,0 +1,64 @@
+.btnToggle {
+  @media only screen and (min-width: 1024px) {
+    display: none;
+  }
+}
+aside {
+  padding: 0 2rem;
+  border-right: 1px solid rgba(var(--gray-100), 1);
+  @media only screen and (max-width: 1024px) {
+    position: fixed;
+    width: 300px;
+    background-color: rgba(var(--white), 1);
+    transform: translateX(-300px);
+    transition: transform ease-in 0.3s;
+    &.show {
+      transform: translateX(0);
+    }
+  }
+
+  .filterIcon {
+    position: relative;
+    width: 15px;
+    height: 2px;
+    background-color: rgba(var(--black-950), 1);
+    margin-right: 7px;
+    top: -4px;
+    &::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: inherit;
+      transform: translateX(-50%);
+      left: 50%;
+      top: 5px;
+      background-color: inherit;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      transform: translateX(-50%);
+      left: 50%;
+      top: 9px;
+      width: 7px;
+      height: inherit;
+      background-color: inherit;
+    }
+  }
+  .filterText {
+    color: rgba(var(--black-950), 1);
+    margin: 0;
+    font-size: 1rem;
+    line-height: normal;
+    font-weight: 600;
+  }
+  .clearFilter {
+    border-width: 0 0 1px 0;
+    background-color: transparent;
+    padding: 0;
+    outline: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}

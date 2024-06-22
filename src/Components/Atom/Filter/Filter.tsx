@@ -1,3 +1,4 @@
+import styles from "./Filter.module.scss";
 interface FilterProps {
   FilterName: string;
   cats: string[];
@@ -11,22 +12,31 @@ const Filter: React.FC<FilterProps> = ({
   onChange,
 }) => {
   return (
-    <div>
-      <h2>{FilterName}</h2>
-      {cats.map(
-        (cat) =>
-          cat && (
-            <label key={cat}>
-              <input
-                type="checkbox"
-                value={cat}
-                checked={appliedCat.includes(cat)}
-                onChange={() => onChange(cat)}
-              />
-              {cat}
-            </label>
-          )
-      )}
+    <div className={styles.filterContainer}>
+      <h2 className={`d-flex justify-content-between ${styles.filterName}`}>
+        {FilterName}
+        <span className="d-flex">
+          <i className="fa-solid fa-minus"></i>
+        </span>
+      </h2>
+      <ul className={styles.filterList}>
+        {cats.map(
+          (cat) =>
+            cat && (
+              <li key={cat}>
+                <label>
+                  <input
+                    type="checkbox"
+                    value={cat}
+                    checked={appliedCat.includes(cat)}
+                    onChange={() => onChange(cat)}
+                  />
+                  {cat}
+                </label>
+              </li>
+            )
+        )}
+      </ul>
     </div>
   );
 };

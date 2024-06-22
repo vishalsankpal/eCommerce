@@ -1,0 +1,28 @@
+.filterContainer {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(var(--gray-100), 1);
+  .filterName {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.625rem;
+    font-weight: 600;
+    color: rgba(var(--black-950), 1);
+  }
+  .filterList {
+    list-style: none;
+    padding: 0;
+    li {
+      line-height: normal;
+      margin-bottom: 10px;
+    }
+    label {
+      color: rgba(var(--black-900), 1);
+      font-size: 0.938rem;
+      text-transform: capitalize;
+    }
+    input[type="checkbox"] {
+      accent-color: rgba(var(--black-acent), 1);
+      margin: 0 6px 0;
+    }
+  }
+}

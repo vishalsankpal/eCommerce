@@ -1,3 +1,5 @@
+// @import url("./assets/fonts/fonts.css");
+// reset css
 *,
 :after,
 :before {
@@ -5,7 +7,24 @@
 }
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
+// custom font
+// @font-face {
+//   font-family: "TodoesRegular";
+//   src: url("./assets/fonts/TodesRegular.ttf") format("ttf");
+//   font-weight: normal;
+//   font-style: normal;
+//   //font-display: swap;
+// }
+// @font-face {
+//   font-family: "TodoesMedium";
+//   src: url("./assets/fonts/TodesMedium.ttf") format("ttf"),
+//     url("./assets/fonts/TodesMedium.otf") format("otf");
+//   font-weight: normal;
+//   font-style: normal;
+//   font-display: swap;
+// }
 body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -16,6 +35,44 @@ body {
   font-weight: 500;
   line-height: 1.5;
   margin: 0;
+  height: 100%;
+}
+:root {
+  // Below color is golden color palates
+  --golden-50: 253, 249, 237;
+  --golden-100: 248, 235, 205;
+  --golden-200: 240, 214, 151;
+  --golden-300: 233, 189, 96;
+  --golden-400: 227, 166, 60;
+  --golden-500: 219, 135, 36;
+  --golden-600: 194, 103, 29;
+  --golden-700: 161, 74, 28;
+  --golden-800: 131, 59, 29;
+  --golden-900: 108, 49, 27;
+  --golden-950: 62, 23, 10;
+  // Below color is blue color palates
+  --blue-50: 246, 247, 249;
+  --blue-100: 235, 237, 243;
+  --blue-200: 211, 215, 228;
+  --blue-300: 172, 181, 205;
+  --blue-400: 127, 143, 177;
+  --blue-500: 95, 112, 152;
+  --blue-600: 75, 89, 126;
+  --blue-700: 61, 72, 103;
+  --blue-800: 54, 63, 86;
+  --blue-900: 48, 54, 74;
+  --blue-950: 36, 40, 55;
+  //Black color shades
+  --black-900: 59, 65, 73;
+  --black-950: 0, 0, 0;
+  //Gray color shades
+  --gray-100: 241, 241, 241;
+  //White color
+  --white: 255, 255, 255;
+  --black-acent: 0, 0, 0;
+}
+#root {
+  height: 100%;
 }
 $breakpoints: (
   "default": "default",
@@ -113,5 +170,40 @@ $breakpoints: (
         row-gap: #{$i}rem;
       }
     }
+    @for $i from 1 through 12 {
+      .gap-#{$i} {
+        gap: #{$i}rem;
+      }
+      .#{$name}\:gap-x-#{$i} {
+        gap: #{$i}rem;
+      }
+      .#{$name}\:gap-y-#{$i} {
+        gap: #{$i}rem;
+      }
+    }
   }
+}
+.d-flex {
+  display: flex;
+}
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.justify-content-between {
+  justify-content: space-between;
+}
+.justify-content-start {
+  justify-content: start;
+}
+.justify-content-end {
+  justify-content: flex-end;
+}
+.text-truncate {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
