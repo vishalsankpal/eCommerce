@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   getProducts,
   setSelectedCategories,
@@ -8,18 +8,43 @@ import {
 } from "./ProductSlice";
 import { useAppSelector, useAppDispatch } from "../../Hooks/hooks";
 import { selectFilteredProducts, selectProducts } from "./Selector";
-const PLP = () => {
-  //const [product, setProduct] = useState([]);
-  const { products, isLoading, error } = useAppSelector(
-    (state) => state.products
-  );
+import Sorting from "../../Components/Atom/Sorting/Sorting";
+import Filter from "../../Components/Atom/Filter/Filter";
+
+interface Product {
+  availabilityStatus: string;
+  category: string;
+  description: string;
+  dimensions: object;
+  discountPercentage: number;
+  id: number;
+  images: [];
+  meta: object;
+  minimumOrderQuantity: number;
+  price: number;
+  rating: number;
+  returnPolicy: string;
+  reviews: [];
+  shippingInformation: string;
+  sku: string;
+  stock: number;
+  tags: [];
+  thumbnail: string;
+  title: string;
+  warrentyInformation: string;
+  weight: string;
+  brand: string;
+  // Add other product properties if needed
+}
+const PLP: React.FC = (): JSX.Element => {
+  const { isLoading, error } = useAppSelector((state) => state.products);
   const filteredProducts = useAppSelector(selectFilteredProducts);
-  const allProducts = useAppSelector(selectProducts);
+  const allProducts: Product[] = useAppSelector(selectProducts);
   const dispatch = useAppDispatch();
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [sortBy, setSortBy] = useState("price");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<string>("price");
+  const [sortOrder, setSortOrder] = useState<string>("asc");
   const handleClearFilters = () => {
     dispatch(resetFilters());
     setCategories([]);
@@ -39,31 +64,34 @@ const PLP = () => {
 
   useEffect(() => {
     dispatch(setSortCriteria({ sortBy, sortOrder }));
+    //console.log(filteredProducts);
   }, [sortBy, sortOrder, dispatch]);
 
-  const handleCategoryChange = (category) => {
-    setCategories((prevCategories) =>
+  const handleCategoryChange = (category: string) => {
+    setCategories((prevCategories: string[]) =>
       prevCategories.includes(category)
         ? prevCategories.filter((cat) => cat !== category)
         : [...prevCategories, category]
     );
   };
-  const handleBrandChange = (brand) => {
-    setBrands((prevBrands) =>
+  const handleBrandChange = (brand: string) => {
+    setBrands((prevBrands: string[]) =>
       prevBrands.includes(brand)
         ? prevBrands.filter((br) => br !== brand)
         : [...prevBrands, brand]
     );
   };
 
-  const handleSortByChange = (e) => setSortBy(e.target.value);
-  const handleSortOrderChange = (e) => setSortOrder(e.target.value);
+  const handleSortByChange = (e: ChangeEvent<HTMLSelectElement>) =>
+    setSortBy(e.target.value);
+  const handleSortOrderChange = (e: ChangeEvent<HTMLSelectElement>) =>
+    setSortOrder(e.target.value);
 
   const uniqueCategories = [
-    ...new Set(allProducts.map((product) => product.category)),
+    ...new Set(allProducts.map((product: Product) => product.category)),
   ];
   const uniqueBrands = [
-    ...new Set(allProducts.map((product) => product.brand)),
+    ...new Set(allProducts.map((product: Product) => product.brand)),
   ];
   if (isLoading) {
     return <div>Loading...</div>;
@@ -76,68 +104,39 @@ const PLP = () => {
     <div>
       <div>
         <h3>Sort By</h3>
-        <label>
-          Sort By:
-          <select value={sortBy} onChange={handleSortByChange}>
-            <option value="price">Price</option>
-            <option value="title">Title</option>
-          </select>
-        </label>
-        <label>
-          Order:
-          <select value={sortOrder} onChange={handleSortOrderChange}>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </label>
+        <Sorting
+          labelName={"Sort By"}
+          sortName={sortBy}
+          onChange={handleSortByChange}
+          options={["price", "title"]}
+        />
+        <Sorting
+          labelName={"Order"}
+          sortName={sortOrder}
+          onChange={handleSortOrderChange}
+          options={["asc", "desc"]}
+        />
       </div>
-      <div>
-        <h3>Categories</h3>
-        {uniqueCategories.map((category) => (
-          <label key={category}>
-            <input
-              type="checkbox"
-              value={category}
-              checked={categories.includes(category)}
-              onChange={() => handleCategoryChange(category)}
-            />
-            {category}
-          </label>
-        ))}
-      </div>
-      <div>
-        <h3>brands</h3>
-        {uniqueBrands.map((brand) => (
-          <label key={brand}>
-            <input
-              type="checkbox"
-              value={brand}
-              checked={brands.includes(brand)}
-              onChange={() => handleBrandChange(brand)}
-            />
-            {brand}
-          </label>
-        ))}
-      </div>
+      <Filter
+        FilterName="Categories"
+        cats={uniqueCategories}
+        appliedCat={categories}
+        onChange={handleCategoryChange}
+      />
+      <Filter
+        FilterName="Brands"
+        cats={uniqueBrands}
+        appliedCat={brands}
+        onChange={handleBrandChange}
+      />
       <button onClick={handleClearFilters}>Clear filters</button>
       <ul>
-        {filteredProducts.map((product) => (
+        {filteredProducts.map((product: Product) => (
           <li key={product.id}>
             {product.title} - ${product.price} - {product.category}
           </li>
         ))}
       </ul>
-      {/* {Array.isArray(products?.data.products) &&
-        products?.data.products.map((item) => (
-          <div key={item?.id}>
-            <h2>{item?.title}</h2>
-            {item?.images.map((imgItem, i) => (
-              <div key={i}>
-                <img src={imgItem} />
-              </div>
-            ))}
-          </div>
-        ))} */}
     </div>
   );
 };
