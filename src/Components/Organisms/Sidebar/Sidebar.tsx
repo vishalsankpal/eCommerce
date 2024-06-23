@@ -8,7 +8,8 @@ import {
 import { selectProducts } from "../../../Pages/ProductList/Selector";
 import { useAppSelector, useAppDispatch } from "../../../Hooks/ReduxHooks";
 import Filter from "../../Atom/Filter/Filter";
-
+import filterImg from "../../../assets/Icons/sort.png";
+import FilterToggle from "../../../assets/Icons/filterGold.png";
 interface Product {
   availabilityStatus: string;
   category: string;
@@ -79,36 +80,45 @@ const Sidebar: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <button
-        className={styles.btnToggle}
-        onClick={() => setShowSidebar(!showSidebar)}
-      >
-        Show
-      </button>
       <aside className={showSidebar ? styles.show : " "}>
-        {(categories.length >= 1 || brands.length >= 1) && (
-          <div className="d-flex justify-content-between">
-            <div className="d-flex align-items-center">
-              <div className={styles.filterIcon}></div>
-              <h2 className={styles.filterText}>Filter</h2>
+        <button
+          className={styles.btnToggle}
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          <img src={FilterToggle} alt="Toggle" />
+        </button>
+        <div className={styles.sidebarFilterContainer}>
+          {(categories.length >= 1 || brands.length >= 1) && (
+            <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-center">
+                <div
+                  className={`d-flex align-items-center ${styles.filterIcon}`}
+                >
+                  <img src={filterImg} alt="filter image" />
+                </div>
+                <h2 className={styles.filterText}>Filter</h2>
+              </div>
+              <button
+                onClick={handleClearFilters}
+                className={styles.clearFilter}
+              >
+                Clear All
+              </button>
             </div>
-            <button onClick={handleClearFilters} className={styles.clearFilter}>
-              Clear All
-            </button>
-          </div>
-        )}
-        <Filter
-          FilterName="Category"
-          cats={uniqueCategories}
-          appliedCat={categories}
-          onChange={handleCategoryChange}
-        />
-        <Filter
-          FilterName="Brands"
-          cats={uniqueBrands}
-          appliedCat={brands}
-          onChange={handleBrandChange}
-        />
+          )}
+          <Filter
+            FilterName="Category"
+            cats={uniqueCategories}
+            appliedCat={categories}
+            onChange={handleCategoryChange}
+          />
+          <Filter
+            FilterName="Brands"
+            cats={uniqueBrands}
+            appliedCat={brands}
+            onChange={handleBrandChange}
+          />
+        </div>
       </aside>
     </>
   );

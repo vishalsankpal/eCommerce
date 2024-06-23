@@ -1,0 +1,15 @@
+.label {
+  color: rgba(var(--black-900));
+  select {
+    margin-left: 10px;
+    border: none;
+    font-size: 1rem;
+    padding-right: 1rem;
+    text-transform: capitalize;
+    outline: none;
+    font-weight: 600;
+  }
+  & + .label {
+    margin-left: 1rem;
+  }
+}

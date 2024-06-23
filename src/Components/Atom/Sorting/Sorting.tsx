@@ -1,3 +1,4 @@
+import styles from "./Sorting.module.scss";
 interface SortingProps {
   labelName: string;
   sortName: string;
@@ -12,7 +13,7 @@ const Sorting: React.FC<SortingProps> = ({
 }) => {
   return (
     <>
-      <label>
+      <label className={styles.label}>
         {labelName}:
         <select value={sortName} onChange={onChange}>
           {options.map((opt) => (

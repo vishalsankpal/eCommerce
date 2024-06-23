@@ -3,93 +3,34 @@ import { getProducts, setSortCriteria } from "./ProductSlice";
 import { useAppSelector, useAppDispatch } from "../../Hooks/ReduxHooks";
 import selectFilteredProducts from "./Selector";
 import Sorting from "../../Components/Atom/Sorting/Sorting";
-//import Filter from "../../Components/Atom/Filter/Filter";
 import Loader from "../../Components/Templates/Loader/Loader";
 import styles from "./PLP.module.scss";
 import Sidebar from "../../Components/Organisms/Sidebar/Sidebar";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// interface Product {
-//   availabilityStatus: string;
-//   category: string;
-//   description: string;
-//   dimensions: object;
-//   discountPercentage: number;
-//   id: number;
-//   images: [];
-//   meta: object;
-//   minimumOrderQuantity: number;
-//   price: number;
-//   rating: number;
-//   returnPolicy: string;
-//   reviews: [];
-//   shippingInformation: string;
-//   sku: string;
-//   stock: number;
-//   tags: [];
-//   thumbnail: string;
-//   title: string;
-//   warrentyInformation: string;
-//   weight: string;
-//   brand: string;
-//   // Add other product properties if needed
-//}
+import AdBanner from "../../Components/Atom/AdBanner/AdBanner";
+import Card from "../../Components/Organisms/Card/Card";
+import AdCard from "../../Components/Organisms/AdCard/AdCard";
+
 const PLP: React.FC = (): JSX.Element => {
   const { isLoading, error } = useAppSelector((state) => state.products);
   const filteredProducts = useAppSelector(selectFilteredProducts);
-  // const allProducts: Product[] = useAppSelector(selectProducts);
+
   const dispatch = useAppDispatch();
-  // const [categories, setCategories] = useState<string[]>([]);
-  // const [brands, setBrands] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("price");
   const [sortOrder, setSortOrder] = useState<string>("asc");
-  // const handleClearFilters = () => {
-  //   dispatch(resetFilters());
-  //   setCategories([]);
-  //   setBrands([]);
-  // };
+
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(setSelectedCategories(categories));
-  // }, [categories, dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(setSelectedBrands(brands));
-  // }, [brands, dispatch]);
-
   useEffect(() => {
     dispatch(setSortCriteria({ sortBy, sortOrder }));
-    //console.log(filteredProducts);
   }, [sortBy, sortOrder, dispatch]);
-
-  // const handleCategoryChange = (category: string) => {
-  //   setCategories((prevCategories: string[]) =>
-  //     prevCategories.includes(category)
-  //       ? prevCategories.filter((cat) => cat !== category)
-  //       : [...prevCategories, category]
-  //   );
-  // };
-  // const handleBrandChange = (brand: string) => {
-  //   setBrands((prevBrands: string[]) =>
-  //     prevBrands.includes(brand)
-  //       ? prevBrands.filter((br) => br !== brand)
-  //       : [...prevBrands, brand]
-  //   );
-  // };
 
   const handleSortByChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setSortBy(e.target.value);
   const handleSortOrderChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setSortOrder(e.target.value);
 
-  // const uniqueCategories = [
-  //   ...new Set(allProducts.map((product: Product) => product.category)),
-  // ];
-  // const uniqueBrands = [
-  //   ...new Set(allProducts.map((product: Product) => product.brand)),
-  // ];
   if (isLoading) {
     return <Loader />;
   }
@@ -99,39 +40,32 @@ const PLP: React.FC = (): JSX.Element => {
   }
   return (
     <div className={`grid ${styles.plpWrapper}`}>
-      {/* <button onClick={handleClearFilters}>Clear filters</button>
-        <Filter
-          FilterName="Categories"
-          cats={uniqueCategories}
-          appliedCat={categories}
-          onChange={handleCategoryChange}
-        />
-        <Filter
-          FilterName="Brands"
-          cats={uniqueBrands}
-          appliedCat={brands}
-          onChange={handleBrandChange}
-        /> */}
       <Sidebar />
-      <main>
-        <Sorting
-          labelName={"Sort By"}
-          sortName={sortBy}
-          onChange={handleSortByChange}
-          options={["price", "title"]}
-        />
-        <Sorting
-          labelName={"Order"}
-          sortName={sortOrder}
-          onChange={handleSortOrderChange}
-          options={["asc", "desc"]}
-        />
+      <main className={styles.mainContainer}>
+        <AdBanner />
+        <div
+          className={`d-flex justify-content-end ${styles.sortingContainer}`}
+        >
+          <Sorting
+            labelName={"Sort by"}
+            sortName={sortBy}
+            onChange={handleSortByChange}
+            options={["price", "title"]}
+          />
+          <Sorting
+            labelName={"Order"}
+            sortName={sortOrder}
+            onChange={handleSortOrderChange}
+            options={["asc", "desc"]}
+          />
+        </div>
 
-        <div className="grid grid-col-3 gap-3">
-          {filteredProducts.map((product) => (
-            <div key={product.id}>
-              {product.title} - ${product.price} - {product.category}
-            </div>
+        <div className="grid grid-col-3 gap-3 xs:grid-col-2 xxs:grid-col-1 gap-3 xs:gap-1">
+          {filteredProducts.map((product, index) => (
+            <>
+              <Card {...product} key={product.id} />
+              {(index + 1) % 9 === 0 && <AdCard type="card" />}
+            </>
           ))}
         </div>
       </main>
