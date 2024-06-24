@@ -19,7 +19,7 @@ interface Product {
   brand: string;
 }
 
-let LIMIT = 10;
+const LIMIT = 50;
 function* getProducts() {
   try {
     const response: { products: Product[] } = yield call(
@@ -45,7 +45,9 @@ function* fetchMoreProducts(action: { payload: number }) {
       `https://dummyjson.com/products?&skip=${action.payload}&limit=${action.payload}`
     );
     console.log(response);
-    yield put(fetchMoreProductsSuccess(response.products));
+    if (action.payload <= response.total) {
+      yield put(fetchMoreProductsSuccess(response.products));
+    }
   } catch (error) {
     yield put(fetchMoreProductsFailed(error.message));
   }

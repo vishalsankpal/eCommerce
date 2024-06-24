@@ -25,8 +25,7 @@ const PLP: React.FC = (): JSX.Element => {
   const [sortBy, setSortBy] = useState<string>("price");
   const [sortOrder, setSortOrder] = useState<string>("asc");
   const [offset, setOffset] = useState<number>(0); // Track current offset instead of currentPage
-  const LIMIT = 10; // Define your LIMIT constant here
-  const [pLimit, setLimit] = useState<numbeer>(10);
+  const LIMIT = 50; // Define your LIMIT constant here
 
   // Fetch initial products on component mount
   useEffect(() => {

@@ -80,10 +80,13 @@ const productSlice = createSlice({
       state.error = null;
     },
     fetchMoreProductsSuccess(state, action: PayloadAction<Product[]>) {
-      //state.isLoading = false;
-      console.log(...state.products);
-      state.products = [...state.products, ...action.payload];
-      state.offset += action.payload.length;
+      state.isLoading = false;
+      const newProducts = action.payload.filter(
+        (newProduct) =>
+          !state.products.some((product) => product.id === newProduct.id)
+      );
+      state.products = [...state.products, ...newProducts];
+      state.offset += newProducts.length;
     },
     fetchMoreProductsFailed(state, action: PayloadAction<string>) {
       state.isLoading = false;
